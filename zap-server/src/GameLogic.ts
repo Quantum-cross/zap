@@ -71,9 +71,8 @@ export function DbOnLoad(game: ZapGame, server: ZapServer) {
 	
 	game.spotlight = {
 		spotlightId: -1,
-		pendingAboveId: lastId,
+        pending: [],
 	};
-	game.spotlightIndex = lastArticleIndex;
 	game.spotlightTime = 0;
 	game.spotlightPhase = SpotlightPhase.NONE;
 	SendSpotlight(game, server);
@@ -114,11 +113,14 @@ function TickSpotlight(game: ZapGame, server: ZapServer, deltaTime: number) {
 	switch (game.spotlightPhase) {
 		
 		case SpotlightPhase.NONE:
-			if (game.spotlightIndex >= lastArticleIndex) return; //>> no pending
-			
-			++game.spotlightIndex;
-			
-			const articleToSpotlight = gamePersist.articles[game.spotlightIndex];
+            if (game.spotlight.pending.length <= 0) return; //>> no pending
+
+			const idToSpotlight = game.spotlight.pending.shift()
+            if (idToSpotlight == undefined) return;
+            const articleToSpotlight = game.db.current.articles.find(a => a.id === idToSpotlight);
+            // const articleIndex = game.db.current.articles.findIndex(a => a.id === idToSpotlight);
+            // const articleToSpotlight = gamePersist.articles[articleIndex];
+            if (articleToSpotlight == undefined) return;
 			const headlineLength = articleToSpotlight.headline.length;
 			
 			game.spotlightTime = RangeToRange(headlineLength, HEADLINE_SIZE, SPOTLIGHT_DURATION_MS);
@@ -126,7 +128,7 @@ function TickSpotlight(game: ZapGame, server: ZapServer, deltaTime: number) {
 			
 			game.spotlight = {
 				spotlightId: articleToSpotlight.id,
-				pendingAboveId: articleToSpotlight.id,
+				pending: game.spotlight.pending,
 			};
 			
 			return SendSpotlight(game, server); //>> start spotlight
@@ -139,7 +141,7 @@ function TickSpotlight(game: ZapGame, server: ZapServer, deltaTime: number) {
 			game.spotlightPhase = SpotlightPhase.COOLDOWN;
 			game.spotlight = {
 				spotlightId: -1,
-				pendingAboveId: game.spotlight.pendingAboveId,
+				pending: game.spotlight.pending,
 			};
 			
 			return SendSpotlight(game, server); //>> start cooldown
@@ -154,17 +156,19 @@ function TickSpotlight(game: ZapGame, server: ZapServer, deltaTime: number) {
 }
 
 export function ForceSpotlight(game: ZapGame, id: number, server: ZapServer) {
-	const articleIndex = game.db.current.articles.findIndex(a => a.id === id);
-	if (articleIndex < 0) return; //>> can't find article by id
-	
-	game.spotlight = {
-		spotlightId: -1,
-		pendingAboveId: id - 1,
-	};
-	game.spotlightIndex = articleIndex - 1;
-	game.spotlightTime = 0;
-	game.spotlightPhase = SpotlightPhase.NONE;
-	SendSpotlight(game, server);
+    game.spotlight.pending = [id];
+    game.spotlightTime = 0;
+    game.spotlightPhase = SpotlightPhase.NONE;
+    game.spotlight = {
+        spotlightId: -1,
+        pending: game.spotlight.pending,
+    };
+    SendSpotlight(game, server);
+}
+
+export function QueueSpotlight(game: ZapGame, id: number, server: ZapServer) {
+    game.spotlight.pending.push(id);
+    SendSpotlight(game, server);
 }
 
 export function SetTimer(game: ZapGame, setTimerDat: SetTimerDat, server: ZapServer) {
@@ -316,9 +320,8 @@ export async function ResetGame(game: ZapGame, server: ZapServer) {
 	
 	game.spotlight = {
 		spotlightId: -1,
-		pendingAboveId: -1,
+		pending: []
 	};
-	game.spotlightIndex = -1;
 	game.spotlightTime = 0;
 	game.spotlightPhase = SpotlightPhase.NONE;
 	
@@ -342,6 +345,13 @@ export function AddArticle(game: ZapGame, postArticleDat: PostArticleDat, server
 		location: postArticleDat.location,
 		themeTags: ['TODO'], // TODO
 	};
+
+	console.log(article.orgIdf);
+	if( article.orgIdf === "attack" ){
+		console.log('Attack article!');
+		const situation: SituationDat = {label: 'Wolf', cssClass: 'wolf' };
+		SetSituation(game, situation, server);
+	}
 	
 	console.log(`created Article: ${article.id} ${article.headline}`);
 	
@@ -349,6 +359,8 @@ export function AddArticle(game: ZapGame, postArticleDat: PostArticleDat, server
 	gamePersist.articles.push(article);
 	
 	server.packets.ArticleAdded.Send(game.toAllClients, article);
+
+    game.spotlight.pending.push(article.id)
 	
 	return game.db.Save();
 }

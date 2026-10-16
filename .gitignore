@@ -73,3 +73,11 @@ fabric.properties
 /dist/
 zap-client/assets/audio/juntas_1_veryLargeAndGitIgnored.mp4
 zap-client/assets/videos/juntas/juntas_1_veryLargeAndGitIgnored.mp4
+
+zap-server/C\:/
+zap-server/dist/
+zap-client/dist/
+
+*.d.ts
+
+zap-server/**/*.js

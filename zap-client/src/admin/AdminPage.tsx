@@ -8,6 +8,7 @@ import {useAtom} from 'jotai';
 import {$uuid, $config} from '../ClientState.ts';
 import {SituationControls} from "./SituationControls.tsx";
 import {StatControls} from './StatControls.tsx';
+import {HeadlineControls} from "../controls/HeadlineControls.tsx";
 
 export function AdminPage() {
 	const client = useClient();
@@ -47,8 +48,14 @@ export function AdminPage() {
 					onClick={() => client.packets.ResetGame.Send('')}
 				/>
 			</div>
-			
-			<ArticleSummary
+
+            <HeadlineControls
+                singleOrg={"attack"}
+                postLabel={"WOLF ATTACK"}
+                areaLabel={"Wolf alert headline"}
+            />
+
+            <ArticleSummary
                 showAdmin
             />
 		

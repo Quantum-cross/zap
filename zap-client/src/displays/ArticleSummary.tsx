@@ -1,7 +1,7 @@
 import {useAtom} from 'jotai/index';
 import {ArticleDat} from '../../../zap-shared/_Dats.ts';
 import {Atom} from 'jotai';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {$config, $splitArticles, $spotlight} from '../ClientState.ts';
 import {Button} from '../components/ButtonComponents.tsx';
 import {useClient} from '../ClientContext.ts';
@@ -33,7 +33,6 @@ export function ArticleSummary({showAdmin}: { showAdmin?: boolean }) {
 			<div className={'articleSummaryGrid'}>
 				{articlesToShow.map($article => (
 					<SummaryHeadline
-						key={`${$article}`}
 						$article={$article}
 						showAdmin={showAdmin}
 					/>
@@ -68,7 +67,7 @@ function SummaryHeadline({$article, showAdmin}: {
 	
 	const icon = spotlight.spotlightId === article.id
 		? ' 🔦'
-		: article.id > spotlight.pendingAboveId
+		: spotlight.pending.includes(article.id)
 			? ' ⌛'
 			: '';
 	
@@ -85,7 +84,15 @@ function SummaryHeadline({$article, showAdmin}: {
 							id: article.id,
 						})}
 					/>
-				)}#{article.id}{icon}</div>
+				)}{showAdmin && (
+                    <Button
+                        className={'queueSpotlight'}
+                        label={'⌛'}
+                        onClick={() => client.packets.QueueSpotlight.Send({
+                            id: article.id,
+                        })}
+                    />
+                )} #{article.id}{icon}</div>
 			<div>{org.label}</div>
 			<div>{article.headline}</div>
 			{showAdmin

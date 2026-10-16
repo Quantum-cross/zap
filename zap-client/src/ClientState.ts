@@ -38,7 +38,7 @@ export const $uuid = atomWithStorage('ZAP_UUID', nanoid(5));
 /** all articles we have locally (may not have *all* of them) */
 export const $allArticles = atom<ArticleDat[]>([]);
 export const $splitArticles = splitAtom($allArticles);//, a => `articleAtomId${a.id}`);
-export const $spotlight = atom<SpotlightDat>({spotlightId: -1, pendingAboveId: -1});
+export const $spotlight = atom<SpotlightDat>({spotlightId: -1, pending: []});
 
 export const $spotlightArticle = atom<ArticleDat | null>((get) => {
 	const articles = get($allArticles);

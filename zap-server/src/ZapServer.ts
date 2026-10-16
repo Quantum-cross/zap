@@ -9,10 +9,9 @@ import {
 	T_Packet,
 	T_SocketMsg,
 } from '../../zap-shared/SystemTypes.js';
-import {GamePersist, ZapGame} from './ZapGame.js';
+import {ZapGame} from './ZapGame.js';
 import {InitializePackets_SERVER} from './ServerPkHandlers.js';
 import {ZapPacketDefs} from '../../zap-shared/_Packets.js';
-import {ArticleDat, PostArticleDat} from '../../zap-shared/_Dats.js';
 import {AddClientToGame, MakeGame} from './GameLogic.js';
 
 const PING_MSG = 'PING';
@@ -95,7 +94,7 @@ export class ZapServer {
 			this.packetMap.set(pkHandler.id, pkHandler);
 			
 			pkHandler._Publish =
-				(address, packet) => this.PublishPacket(address, packet, pkHandler);
+				(address: string, packet: T_Packet) => this.PublishPacket(address, packet, pkHandler);
 		}
 	}
 	

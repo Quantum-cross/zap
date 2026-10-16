@@ -5,7 +5,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon ./server.ts",
+    "dev": "nodemon ./server.ts -i \"data*.json\"",
+    "build": "tsc",
     "dev66": "ts-node ./server.ts",
     "note": "for now just use: npm run dev",
     "6666build": "tsc --build tsconfig.json",

@@ -29,6 +29,7 @@ export class ZapPacketDefs<TSrc extends I_PkSource> extends BasePacketDefs<TSrc>
 	AllArticles = this.CLIENT_to_SERVER<none>();
 	ResetGame = this.ADMIN_to_SERVER<none>();
 	ForceSpotlight = this.ADMIN_to_SERVER<{id: number}>();
+    QueueSpotlight = this.ADMIN_to_SERVER<{id: number}>();
 	
 	ArticleList = this.SERVER_to_CLIENT<ArticleListDat>();
 	ArticleAdded = this.SERVER_to_CLIENT<ArticleDat>();

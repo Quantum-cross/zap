@@ -36,7 +36,7 @@ export interface OrgDat {
 
 export interface SpotlightDat {
 	spotlightId: number, // article ID
-	pendingAboveId: number, // article IDs above will be hidden/pending
+    pending: number[],
 }
 
 export interface SetTimerDat {

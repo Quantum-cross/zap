@@ -6,7 +6,7 @@
 
 .articleSummaryGrid {
 	display: grid;
-	grid-template-columns: 120px auto auto auto;
+	grid-template-columns: 135px auto auto auto;
 	gap: var(--admin-spacing);
 }
 

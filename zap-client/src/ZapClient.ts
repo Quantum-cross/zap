@@ -26,6 +26,7 @@ import {TimerDat} from "../../zap-shared/_Dats.ts";
 
 
 const WS_SERVER = 'ws://localhost:3007'; // TODO: config
+// const WS_SERVER = 'ws://10.10.42.1:3007'; // TODO: config
 // const WS_SERVER = 'ws://127.0.0.1:3007'; // TODO: config
 // const WS_SERVER = 'ws://192.168.0.3:3007'; // TODO: config
 // const WS_SERVER = 'ws://192.168.1.100:3007'; // TODO: config

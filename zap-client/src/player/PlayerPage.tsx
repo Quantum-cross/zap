@@ -22,7 +22,7 @@ export function PlayerPage() {
 				<span style={{color: '#d0d0d0'}}>({uuid})</span>
 			</h1>
 			
-			<HeadlineControls/>
+			<HeadlineControls singleOrg={'inc'}/>
 			
 			<Timer $timer={$timer}/>
 			

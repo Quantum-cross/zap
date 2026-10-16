@@ -20,15 +20,22 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "strictPropertyInitialization": false,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "dist",
   },
   "ts-node": {
     "esm": true
   },
-  "references": [
-    {
-      "path": "../zap-shared"
-    }
+//  "references": [
+//    {
+//      "path": "../zap-shared"
+//    }
+//  ],
+  "include": [
+    "src/**/*.ts",
+    "../zap-shared/**/*.ts"
   ]
   //  "compilerOptions": {
   //    /* Visit https://aka.ms/tsconfig to read more about this file */

@@ -3,13 +3,16 @@
     "module": "ESNext",
     "target": "ES2020",
     "sourceMap": true,
-    "declaration": true,
     "declarationMap": true,
     "rootDir": ".",
-    //    "outDir": "./sharedLib/",
+//    "outDir": "./sharedLib/",
     "composite": true,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
 
 
-    "allowImportingTsExtensions": true
+
+    // "allowImportingTsExtensions": true
   }
 }

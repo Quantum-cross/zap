@@ -337,11 +337,11 @@ function  Headline({$article}: { $article: Atom<ArticleDat> }) {
 		'article',
 		article.orgIdf,
 		{'spotlight': spotlight.spotlightId === article.id},
-		{'pending': article.id > spotlight.pendingAboveId},
+		{'pending': spotlight.pending.includes(article.id)},
 	);
 	
 	if ((
-		article.id > spotlight.pendingAboveId
+        spotlight.pending.includes(article.id)
 	) || (
 		spotlight.spotlightId === article.id
 	)) {
@@ -350,7 +350,6 @@ function  Headline({$article}: { $article: Atom<ArticleDat> }) {
 				className={className}
 				data-article-id={article.id}
 				data-spotlight-id={spotlight.spotlightId}
-				data-pending-above-id={spotlight.pendingAboveId}
 			>
 				{article.headline}
 			</span>
@@ -362,7 +361,6 @@ function  Headline({$article}: { $article: Atom<ArticleDat> }) {
 			className={className}
 			data-article-id={article.id}
 			data-spotlight-id={spotlight.spotlightId}
-			data-pending-above-id={spotlight.pendingAboveId}
 		>
 			{article.headline}
 		</div>

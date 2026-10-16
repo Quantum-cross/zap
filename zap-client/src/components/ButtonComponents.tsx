@@ -52,7 +52,7 @@ export type P_Radios = {
 	title: string, // legend?
 	options: T_RadioOption[],
 	filterOption?: (option: T_RadioOption | undefined) => boolean | undefined,
-	
+    hidden: boolean,
 	containerClass?: string,
 }
 
@@ -60,14 +60,17 @@ export function Radios(props: P_Radios) {
 	const options = props.filterOption
 		? props.options.filter(props.filterOption)
 		: props.options;
+    const hiddenOption = props.hidden ?
+        {style: {display: "none"}} : {};
 	
 	return (
 		<fieldset
 			id={props.id}
 			className={clsx('radios', props.containerClass)}
+            {...hiddenOption}
 		>
 			<legend>{props.title}</legend>
-			
+
 			{options.map(option => (
 				<RadioOption
 					key={option.id}

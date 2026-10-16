@@ -35,7 +35,8 @@ const $canSubmit = atom((get) => {
 	return true;
 });
 
-export function HeadlineControls() {
+export function HeadlineControls({singleOrg, postLabel, areaLabel}:
+                                 {singleOrg?: string, postLabel?: string, areaLabel?: string} = {}) {
 	const client = useClient();
 	const config = $store.get($config);
 	
@@ -75,7 +76,7 @@ export function HeadlineControls() {
 				$value={$headline}
 				// description={`don't post stupid shit (TODO, maybe have examples)`}
 				// description={'jksldjf'}
-				placeholder={`Headline`}
+				placeholder={areaLabel ?? `Headline`}
 				// placeholder={`X adjectively verbed Y!`}
 				maxLength={HEADLINE_MAX_SIZE}
 				showCharCount
@@ -89,7 +90,7 @@ export function HeadlineControls() {
 					placeholder={'Jed McJedfry'}
 				/>
 			)}
-			<ThemeControls $org={$org}/>
+			<ThemeControls singleOrg={singleOrg} $org={$org}/>
 			{config.showLocationField && (
 				<Input
 					label={'Location'}
@@ -100,7 +101,7 @@ export function HeadlineControls() {
 			<div id={'container_btnPost'}>
 				<Button
 					id={'btnPost'}
-					label={'Post'}
+					label={postLabel ?? 'Post'}
 					onClick={postArticle}
 					enabledIf={$canSubmit}
 				/>
@@ -117,13 +118,18 @@ const OnlyIncludeOrgIf = (opt: T_RadioOption | undefined) => (
 	opt as T_Org
 ).showAsRadio;
 
-export function ThemeControls({$org}: { $org: PrimitiveAtom<string> }) {
+export function ThemeControls({$org, singleOrg}: { $org: PrimitiveAtom<string>, singleOrg?: string }) {
 	const [config] = useAtom($config);
+    const [org, setOrg] = useAtom($org);
 	if (!config) return <div/>;
-	
+
 	const orgs = config.GetAllOrgs();
 	if (!orgs?.length) return <div/>;
-	
+
+    const useSingleOrg = singleOrg !== undefined;
+    if (useSingleOrg) {
+        setOrg(singleOrg);
+    }
 	return (
 		<Radios
 			id={'radiosTheme'}
@@ -131,6 +137,7 @@ export function ThemeControls({$org}: { $org: PrimitiveAtom<string> }) {
 			title={'Type'}
 			options={orgs}
 			filterOption={OnlyIncludeOrgIf}
+            hidden={useSingleOrg}
 		/>
 	);
 }

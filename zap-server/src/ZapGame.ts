@@ -41,9 +41,8 @@ export class ZapGame {
 	
 	spotlight: SpotlightDat = {
 		spotlightId: -1,
-		pendingAboveId: -1,
+		pending: [],
 	};
-	spotlightIndex: number = -1;
 	spotlightTime: number = 0;
 	spotlightPhase: SpotlightPhase = SpotlightPhase.NONE;
 	
